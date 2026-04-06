@@ -182,19 +182,35 @@ def decode_phase(audio_array, L=2048):
     
     bits = ""
     capacity = (L // 2) - 1
-    d_len = get_delimiter_len()
     delimiter_bits = text_to_bits_padded("")
+    d_len = len(delimiter_bits)
     
     for i in range(capacity):
         idx = i + 1
-        angle = phases[idx]
-        bit = "0" if angle > 0 else "1"
-        bits += bit
+        # If phase is positive, it's a 0; if negative, it's a 1
+        bits += "0" if phases[idx] > 0 else "1"
         
-        if len(bits) >= d_len and bits[-d_len:] == delimiter_bits:
-            return bits_to_text(bits[:-d_len])
+        # AUTO-STOP: If we find the delimiter, we are done!
+        if len(bits) >= d_len and bits.endswith(delimiter_bits):
+            return bits_to_text(bits)
     return ""
 
+def auto_decode_payload(audio_array):
+    # 1. Try LSB first
+    res = decode_lsb(audio_array)
+    if res: return "LSB Engine", res
+    
+    # 2. Try Parity (Common block sizes: 8, 16, 32)
+    for b_size in [8, 16, 32]:
+        res = decode_parity(audio_array, block_size=b_size)
+        if res: return f"Parity Engine (Block {b_size})", res
+        
+    # 3. Try Phase (Common FFT window sizes: 1024, 2048, 4096)
+    for L_size in [1024, 2048, 4096]:
+        res = decode_phase(audio_array, L=L_size)
+        if res: return f"Phase Engine (L={L_size})", res
+        
+    return None, None
 
 # -----------------
 # UI COMPONENTS
@@ -247,7 +263,7 @@ if st.sidebar.button("Execute Stego-Engine", type="primary"):
             st.session_state['processed'] = True
 
 if st.session_state.get('processed', False):
-    tab1, tab2 = st.tabs(["🎛️ The Studio", "🔬 The Forensic Lab"])
+    tab1, tab2, tab3 = st.tabs(["🎛️ The Studio", "🔬 The Forensic Lab", "🔓 The Decryptor"])
     
     orig = st.session_state['orig']
     sr = st.session_state['sr']
@@ -255,32 +271,23 @@ if st.session_state.get('processed', False):
     
     with tab1:
         st.header("The Studio")
-        st.markdown("Listen and export the generated artifacts.")
-        
         cols = st.columns(4)
         for i, (name, info) in enumerate(stegos.items()):
-            c = cols[i]
-            with c:
+            with cols[i]:
                 st.markdown(f"### <span style='color:{info['color']}'>{name}</span>", unsafe_allow_html=True)
                 st.caption(info['desc'])
+                if info['rec']: st.success("Integrity Verified ✅")
+                else: st.error("Extraction Failed ❌")
                 
-                if info['rec']:
-                    st.success("Integrity Verified ✅")
-                else:
-                    st.error("Extraction Failed ❌ (Quantization noise broke the sequence)")
-                    
-                # Audio export
                 out_io = io.BytesIO()
                 wavfile.write(out_io, sr, info['data'])
                 out_io.seek(0)
-                
                 st.audio(out_io, format="audio/wav")
-                st.download_button(label=f"Download {name} .wav", data=out_io, file_name=f"{name.replace(' ', '_')}.wav", mime="audio/wav")
-                
+                st.download_button(label=f"Download {name}", data=out_io, file_name=f"{name}.wav", mime="audio/wav")
     with tab2:
-        st.header("The Forensic Lab")
-        st.markdown("A deep scientific analysis of the digital footprints left by each algorithm.")
-        
+        st.header("Forensic Analysis")
+        st.write("Visualizing the hidden data artifacts...")
+       
         # 1. SNR Gauges
         st.subheader("1. Signal-to-Noise Ratio (SNR) Gauges")
         st.info("💡 **Explain it to a kid:** This is like hiding a whisper in a thunderstorm. The higher the number, the better the whisper is hidden!")
@@ -385,3 +392,29 @@ if st.session_state.get('processed', False):
             height=300
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
+    with tab3:
+        st.header("🔓 Universal Decryptor")
+        st.markdown("Upload any audio file. The engine will auto-detect the steganography method and extract the payload.")
+        
+        up_dec = st.file_uploader("Upload Encoded Audio", type=["wav", "mp3"], key="u_dec")
+        
+        if st.button("Deep Scan & Extract", type="primary"):
+            if up_dec:
+                with st.spinner("Analyzing audio frequencies and bit-patterns..."):
+                    # Handle MP3 to WAV conversion for uploaded files
+                    d_io = convert_to_wav(up_dec)
+                    _, d_data = wavfile.read(d_io)
+                    d_flat = d_data.flatten()
+                    
+                    # RUN AUTO DETECTION
+                    method_found, secret = auto_decode_payload(d_flat)
+                    
+                    if secret:
+                        st.balloons()
+                        st.success(f"Success! Detected Method: **{method_found}**")
+                        st.markdown("### Extracted Message:")
+                        st.code(secret, language="text")
+                    else:
+                        st.error("No hidden message detected. The audio appears to be 'clean' or the data is corrupted.")
+            else:
+                st.warning("Please upload a file to scan.")
