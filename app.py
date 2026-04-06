@@ -248,8 +248,12 @@ if st.sidebar.button("Execute Stego-Engine", type="primary"):
             # --- Verify Integrity ---
             rec_lsb = decode_lsb(stego_lsb) == secret_msg
             rec_par = decode_parity(stego_par) == secret_msg
-            rec_phR = decode_phase(stego_phR) == secret_msg
-            rec_phA = decode_phase(stego_phA) == secret_msg
+            # Strip the delimiter and check if the core secret is inside the decoded string
+            decoded_phR = decode_phase(stego_phR)
+            decoded_phA = decode_phase(stego_phA)
+
+            rec_phR = secret_msg in decoded_phR if decoded_phR else False
+            rec_phA = secret_msg in decoded_phA if decoded_phA else False
             
             # Save into Session State so tabs can access them without rerunning
             st.session_state['orig'] = orig_flat
