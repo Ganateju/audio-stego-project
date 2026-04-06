@@ -28,6 +28,15 @@ m_i = a'_i \land 1
 $$
 
 In addition to traditional LSB, this application features block-based **Parity Coding** and frequency-domain **Phase Coding** (via Discrete Fourier Transform phase shifting), allowing researchers to compare the noise resiliency and footprint differences of competing methodologies.
+## 📚 Documentation
+
+For deeper understanding of the system, refer to:
+
+- 🧠 [Concept & Features](./FEATURES_AND_SIGNIFICANCE.md)  
+  → Intuition, design philosophy, and system-level thinking  
+
+- 🔬 [Technical Specification](./TECHNICAL_SPECIFICATION.md)  
+  → Mathematical models, spectral analysis, and formal framework  
 
 ## Setup and Development
 
