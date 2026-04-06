@@ -53,8 +53,8 @@ You must have `ffmpeg` installed on your machine so `pydub` can perform necessar
 Clone the repository and install the Python dependencies:
 
 ```bash
-git clone <your-github-repo-link>
-cd <your-github-repo-name>
+git clone <https://github.com/Ganateju/audio-stego-project>
+cd <audio-stego-project>
 pip install -r requirements.txt
 ```
 
