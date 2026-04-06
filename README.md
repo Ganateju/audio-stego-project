@@ -35,7 +35,7 @@ For deeper understanding of the system, refer to:
 - 🧠 [Concept & Features](./FEATURES_AND_SIGNIFICANCE.md)  
   → Intuition, design philosophy, and system-level thinking  
 
-- 🔬 [Technical Specification](./TECHNICAL_SPECIFICATION.md)  
+- 🔬 [Technical Specification](./TECHNICAL_ANALYSIS.md)  
   → Mathematical models, spectral analysis, and formal framework  
 
 ## Setup and Development
