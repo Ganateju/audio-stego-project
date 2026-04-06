@@ -37,7 +37,9 @@ For deeper understanding of the system, refer to:
 
 - 🔬 [Technical Specification](./TECHNICAL_ANALYSIS.md)  
   → Mathematical models, spectral analysis, and formal framework  
-
+## 🚀 Try the Live App
+Click the link below to test the audio steganography engines in your browser:
+**[👉 Launch Master Forensics Suite 👈](https://audio-stego-project.streamlit.app/)**
 ## Setup and Development
 
 ### Prerequisites
