@@ -1,74 +1,176 @@
-# Multi-Method Audio Steganography & Forensics Suite
+# 🎙️ Multi-Method Audio Forensics Suite
 
-## Introduction
+### Audio Intelligence Platform | Steganography, Steganalysis & Signal Forensics
 
-This repository contains a professional, research-grade steganography laboratory for multiplexed audio analysis. The application is capable of hiding a secret text payload within a digital audio host using three distinct theoretical and mathematical approaches simultaneously, while also featuring an elite "Forensic Lab" for deep comparative analysis of the resulting signals.
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
+[![Streamlit](https://img.shields.io/badge/Interface-Streamlit-red.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-The system is built visually via Streamlit to operate as an interactive dashboard, ideal for security researchers, cryptographers, and academics.
+---
 
-## How LSB (Least Significant Bit) Works
+## 📌 Overview
 
-The Least Significant Bit (LSB) embedding technique relies on substituting the lowest-order bit of successive audio integer samples with the binary representation of the secret payload. Because digital audio is continuously sampled (commonly at 44.1 kHz, 16-bit PCM), the modification of the $0^\text{th}$ bit typically alters the amplitude of a sample by a negligible quantization step ($\pm 1 / 32768$).
+The Multi-Method Audio Forensics Suite is an interactive signal intelligence platform designed for audio steganography, forensic analysis, and blind payload extraction.
 
-Given the host audio array $A$ of discrete time samples $a_i$, and an encoded binary secret message $M$ composed of discrete bits $m_i \in \{0, 1\}$, the steganographic embedding function $E$ can be modeled as:
+Rather than focusing on a single hiding mechanism, the system provides multiple embedding paradigms alongside comparative forensic tooling to evaluate their statistical behavior, robustness, and detectability.
 
-$$
-E(a_i, m_i) = (a_i \land \sim 1) \lor m_i
-$$
+The project was originally developed as an academic field project and evolved into a small-scale audio security laboratory for experimentation and analysis.
 
-Where:
-- $\land$ represents the bitwise AND operator.
-- $\sim$ represents the bitwise NOT operator.
-- $\lor$ represents the bitwise OR operator.
+---
 
-By systematically applying this formula, the original LSB structure is overwritten while preserving the macroscopic spectral properties of the sound envelope. The retrieval of the payload (extraction process) simply inverses this to isolate the hidden trace:
+## Status
 
-$$
-m_i = a'_i \land 1
-$$
+| Metric | Value |
+|--------|-------|
+| Current State | Functional MVP |
+| Deployment | Streamlit Application Released |
+| Validation | Comparative Signal Analysis |
+| Context | Academic Field Project |
+| Contribution | Primary Development Contributor |
+| Status | Active |
 
-In addition to traditional LSB, this application features block-based **Parity Coding** and frequency-domain **Phase Coding** (via Discrete Fourier Transform phase shifting), allowing researchers to compare the noise resiliency and footprint differences of competing methodologies.
-## 📚 Documentation
+---
 
-For deeper understanding of the system, refer to:
+## Current Focus
 
-- 🧠 [Concept & Features](./FEATURES_AND_SIGNIFICANCE.md)  
-  → Intuition, design philosophy, and system-level thinking  
+- Audio Steganography
+- Blind Steganalysis
+- Signal Transparency
+- Spectral Analysis
+- Payload Recovery
+- Comparative Embedding Evaluation
 
-- 🔬 [Technical Specification](./TECHNICAL_ANALYSIS.md)  
-  → Mathematical models, spectral analysis, and formal framework  
-## 🚀 Try the Live App
-Click the link below to test the audio steganography engines in your browser:
-**[👉 Launch Master Forensics Suite 👈](https://audio-stego-project.streamlit.app/)**
-## Setup and Development
+---
 
-### Prerequisites
+## 🌟 Core Innovation
 
-You must have `ffmpeg` installed on your machine so `pydub` can perform necessary decoding on standard audio file formats (such as `.mp3`). 
-- **Debian / Ubuntu**: `sudo apt install ffmpeg libavcodec-extra`
-- **Windows**: Install static binaries (via winget or direct download) and add to PATH.
+The system approaches steganography as both an embedding problem and a forensic problem.
 
-### Installation
+Instead of implementing a single hiding algorithm, it enables comparative analysis between multiple embedding paradigms.
 
-Clone the repository and install the Python dependencies:
+| Layer | Objective |
+|-------|-----------|
+| LSB Encoding | High-capacity spatial embedding |
+| Parity Coding | Statistical footprint reduction |
+| Phase Coding | Frequency-domain concealment |
+| Blind Steganalysis | Method-independent payload recovery |
+
+---
+
+## 🎙 Signal Intelligence Pipeline
+
+| Stage | Purpose |
+|-------|---------|
+| Audio Acquisition | Load host signal |
+| Payload Encoding | Convert text into binary |
+| Embedding | LSB / Parity / Phase |
+| Signal Reconstruction | Generate stego audio |
+| Residual Analysis | Difference computation |
+| Spectral Analysis | Mel-Spectrogram generation |
+| Transparency Metrics | SNR & PSNR |
+| Blind Detection | Universal Decoder |
+| Visualization | Interactive forensic dashboard |
+
+---
+
+## 🔬 Embedding Engines
+
+### LSB Engine
+
+- High Capacity
+- Fast Embedding
+- Spatial Domain Encoding
+- Easily Detectable
+
+### Parity Engine
+
+- Sparse Modification Strategy
+- Improved Statistical Transparency
+- Balanced Capacity
+- Distributed Distortion
+
+### Phase Engine
+
+- Frequency Domain Encoding
+- Highly Robust
+- Minimal Audible Distortion
+- High Stealth Characteristics
+
+---
+
+## 🧪 Forensic Laboratory
+
+The forensic environment enables detailed analysis of signal artifacts introduced during embedding.
+
+Features include:
+
+- Signal-to-Noise Ratio Gauges
+- Difference Microscope
+- Residual Visualization
+- Mel-Spectrogram Comparison
+- Bit-Level Modification Mapping
+- Comparative Transparency Analysis
+- Universal Decryptor
+
+---
+
+## 🛠️ Technology Stack
+
+| Domain | Stack |
+|--------|-------|
+| Signal Processing | NumPy, SciPy |
+| Audio Analysis | Librosa, Pydub |
+| Embedding Engines | LSB, Parity, Phase Coding |
+| Spectral Analysis | Mel Spectrograms |
+| Forensics | SNR, PSNR, Residual Analysis |
+| Visualization | Streamlit |
+| Audio Utilities | FFmpeg |
+
+---
+
+## 🚀 Live Application
+
+### Web Deployment
+
+https://audio-stego-project.streamlit.app/
+
+### Local Setup
 
 ```bash
 git clone https://github.com/Ganateju/audio-stego-project
+
 cd audio-stego-project
+
 pip install -r requirements.txt
-```
 
-### Usage
-
-To launch the dashboard locally via the Streamlit web server:
-
-```bash
 streamlit run app.py
 ```
 
-The app will map to `http://localhost:8501`. 
+---
 
-### Features
+## Engineering Domains
 
-1. **The Studio (Encoder)**: Generates 4 parallel channels of audio (`LSB`, `Parity`, `Phase Loud`, `Phase Stealth`) containing the secret payload.
-2. **The Forensic Lab**: Includes Signal-To-Noise Ratio (SNR) Gauges, the "Difference Microscope" to evaluate the signal residue, Mel-Spectrogram grids, and Bit-Level scatter plot mapping.
+- Signal Processing
+- Information Hiding
+- Digital Forensics
+- Audio Intelligence
+- Spectral Analysis
+- Secure Communication
+- Applied Cryptography
+- Systems Engineering
+
+---
+
+## 🧩 Developer Note
+
+> Encryption protects content.
+
+> Steganography protects existence.
+
+This project explores how information can be embedded, analyzed and recovered while preserving the statistical behavior of the host signal.
+
+---
+
+Built by Ganateju
+
+*"If encryption is a locked box, steganography is ensuring nobody notices the box exists."*
